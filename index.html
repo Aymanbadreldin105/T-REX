@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exam Page</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename ='style.css')}}">
+</head>
+<body>
+	<header class="container">
+		<div class="header">
+			<div class="icon"><img src="https//plaesholder/100/100"></div>
+			<nav>
+				<ul>
+					<li>
+						Home
+					</li>
+					<li>
+						About
+					</li>
+					<li>
+						login
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<div class="container">
+		<div class="nav">
+			<h1>Exam :Answer The Questions</h1>
+			<div><p>You Have&nbsp;<span id="count">5</span>&nbsp;Questions</p></div>
+			</div>
+		<form>
+			<input type="radio" name="q1" class="q1"><br>
+			<input type="radio" name="q1" class="q1"><br>
+			<input type="radio" name="q1" class="q1"><br>
+			<input type="radio" name="q1" class="q1"><br>
+
+			<input type="radio" name="q2" class="q2"><br>
+			<input type="radio" name="q2" class="q2"><br>
+			<input type="radio" name="q2" class="q2"><br>
+			<input type="radio" name="q2" class="q2"><br>
+
+			<input type="radio" name="q3" class="q3"><br>
+			<input type="radio" name="q3" class="q3"><br>
+			<input type="radio" name="q3" class="q3"><br>
+			<input type="radio" name="q3" class="q3"><br>
+
+			<input type="radio" name="q4" class="q4"><br>
+			<input type="radio" name="q4" class="q4"><br>
+			<input type="radio" name="q4" class="q4"><br>
+			<input type="radio" name="q4" class="q4"><br>
+		</form>
+		
+	</div>	
+	<h1>AJAX Example with Flask</h1>
+    <input type="text" id="messageInput" placeholder="Enter a message">
+    <button id="sendButton">Send</button>
+    <p id="response"></p>
+	<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() { 
+		const checkboxes = Array.from(document.querySelectorAll('.q1, .q2, .q3, .q4'));
+	    const count = document.getElementById('count');	
+
+	 	function updateCounter() {
+	 		const checkedCount = checkboxes.filter(cd => cd.checked).length;
+	 		const unchecked = (checkboxes.length - 12) - checkedCount;
+	 		if (checkboxes !== 0) {
+	 			
+	 			count.textContent = `${unchecked}`;
+	 		} else {
+	 			count.textContent =`${checkboxes.length}`;
+	 		}
+	 	}
+	 	checkboxes.forEach(checkbox => {
+	 		checkbox.addEventListener('change', updateCounter);
+	 	});
+	 	updateCounter();
+	});
+		
+});
+</script>
+</body>
+</html>
