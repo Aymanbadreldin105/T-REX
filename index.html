@@ -1,85 +1,164 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Exam Page</title>
-	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename ='style.css')}}">
-</head>
-<body>
-	<header class="container">
-		<div class="header">
-			<div class="icon"><img src="https//plaesholder/100/100"></div>
-			<nav>
-				<ul>
-					<li>
-						Home
-					</li>
-					<li>
-						About
-					</li>
-					<li>
-						login
-					</li>
-				</ul>
-			</nav>
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title>T-REX runner</title>
+		<style type="text/css">
+@keyframes slideright{
+	from{
+		background-position:7000%; 
+	}
+	to{
+		background-position: 0%;
+	}
+}
+.desert{
+	position: absolute;
+	background-image:linear-gradient(to right, red , yellow);
+	bottom: 0;
+	height: 200px;
+	width: 100%;
+	animation: slideright 600s infinite linear;
+}
+.dino{
+	position: absolute;
+	background-image:url("https://trex-runner.com/img/night.png");
+	background-size: cover;
+	bottom: 0;
+	height: 60px;
+	width: 60px;
+}
+.obstacle{
+	
+	position: absolute;
+	background-color:#ccc;
+	bottom: 0px;
+	height: 60px;
+	width: 60px;
+}
+}
+		</style>
+	</head>
+	<body>
+<button onclick="restartGame()">reset</button>
+	<div class="desert">
+		<h2 class="header"></h2>
+		<div class="grid">
+			<div class="dino"></div>
+			 
 		</div>
-	</header>
-	<div class="container">
-		<div class="nav">
-			<h1>Exam :Answer The Questions</h1>
-			<div><p>You Have&nbsp;<span id="count">5</span>&nbsp;Questions</p></div>
-			</div>
-		<form>
-			<input type="radio" name="q1" class="q1"><br>
-			<input type="radio" name="q1" class="q1"><br>
-			<input type="radio" name="q1" class="q1"><br>
-			<input type="radio" name="q1" class="q1"><br>
-
-			<input type="radio" name="q2" class="q2"><br>
-			<input type="radio" name="q2" class="q2"><br>
-			<input type="radio" name="q2" class="q2"><br>
-			<input type="radio" name="q2" class="q2"><br>
-
-			<input type="radio" name="q3" class="q3"><br>
-			<input type="radio" name="q3" class="q3"><br>
-			<input type="radio" name="q3" class="q3"><br>
-			<input type="radio" name="q3" class="q3"><br>
-
-			<input type="radio" name="q4" class="q4"><br>
-			<input type="radio" name="q4" class="q4"><br>
-			<input type="radio" name="q4" class="q4"><br>
-			<input type="radio" name="q4" class="q4"><br>
-		</form>
-		
-	</div>	
-	<h1>AJAX Example with Flask</h1>
-    <input type="text" id="messageInput" placeholder="Enter a message">
-    <button id="sendButton">Send</button>
-    <p id="response"></p>
-	<script src=
-"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-    </script>
+	</div> 
+</div>
+</div>
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() { 
-		const checkboxes = Array.from(document.querySelectorAll('.q1, .q2, .q3, .q4'));
-	    const count = document.getElementById('count');	
+	const dino =document.querySelector(".dino")
+	const grid =document.querySelector(".grid")
+	const alert =  document.querySelector(".header")
+	let position = 0
+	let gravity = 0.9
+	let isjumping = false
+	let isGameOver = false
+	let randomTime = Math.random() * 4000
+	let timerId = null;
+    let generateTimeoutId = null;
+	 const jumpSound = new Audio("data:audio/mpeg;base64,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");
+	  const boomSound = new Audio("https://opengameart.org/sites/default/files/boom5.mp3");
 
-	 	function updateCounter() {
-	 		const checkedCount = checkboxes.filter(cd => cd.checked).length;
-	 		const unchecked = (checkboxes.length - 12) - checkedCount;
-	 		if (checkboxes !== 0) {
-	 			
-	 			count.textContent = `${unchecked}`;
-	 		} else {
-	 			count.textContent =`${checkboxes.length}`;
-	 		}
-	 	}
-	 	checkboxes.forEach(checkbox => {
-	 		checkbox.addEventListener('change', updateCounter);
-	 	});
-	 	updateCounter();
-	});
+	function control(e){
+		if (e.code === "Space"){
+			if (!isjumping) {
+				jump();
+				playJumpSound()
+			}
+		}
+	}
+	function jump(){
+		isjumping = true
+		let count = 0
+		let timerId = setInterval(function () {
+				//move down
+		if (count === 15) {
+			clearInterval(timerId)
+			let downTimerId=setInterval(function(){
+			if(count === 0){
+				clearInterval(downTimerId)
+				isjumping = false
+				
+			}
+            position-=5
+			count--
+			position = position * gravity 
+			dino.style.bottom = position +'px'
+			},20)
+		}
+			//move up
+			position+=30
+			count++
+			position = position * gravity 
+			dino.style.bottom = position +'px'
+		},20)
+	         }
+	
+	function geneateObstacles(){
+		if (!isGameOver) {
+			
+			let obstaclePosition =1000
+		const obstacle = document.createElement("div")
+		obstacle.classList.add("obstacle")
+		grid.appendChild(obstacle)
+		obstacle.style.left = obstaclePosition +'px'
 		
-});
-</script>
-</body>
-</html>
+		 timerId = setInterval(function(){
+		 	obstaclePosition-=10
+		    obstacle.style.left = obstaclePosition +'px'
+			if (obstaclePosition > 0 && obstaclePosition < 60 && position < 60 ) {
+				alert.innerHTML = 'Game Over'
+				clearInterval(timerId)
+				isGameOver=true
+				playSound();
+				//remove all chlidren
+				const children = grid.querySelectorAll("*");
+			    children.forEach(child => {
+			      if (!child.classList.contains("dino")) {
+			      child.remove();
+	  }
+	});
+			}
+			
+		},20)
+		 generateTimeoutId = setTimeout(geneateObstacles, randomTime)
+		}
+		
+	}
+	function restartGame() {
+	// أوقف المؤقتات السابقة
+	clearInterval(timerId);
+	clearTimeout(generateTimeoutId);
+
+	position = 0;
+	isjumping = false;
+	isGameOver = false;
+	alert.innerHTML = "";
+
+	const children = grid.querySelectorAll("*");
+	children.forEach(child => {
+		if (!child.classList.contains("dino")) {
+			child.remove();
+		}
+	});
+
+	randomTime = Math.random() * 4000;
+	geneateObstacles();
+} 
+	geneateObstacles()
+	document.addEventListener('keydown',control)  
+function playSound() {
+   		 boomSound.currentTime = 0; // يعيد الصوت من البداية كل مرة
+       boomSound.play();
+  }
+    function playJumpSound() {
+   		 jumpSound.currentTime = 0; // يعيد الصوت من البداية كل مرة
+       jumpSound.play();
+  }
+		</script>
+	</body>
+	</html>	
